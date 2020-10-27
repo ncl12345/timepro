@@ -17,7 +17,7 @@ export default class HeaderBar extends Component {
     }
     render() {
         return (
-                <Header className="site-layout-background" style={{ padding: 0 }} >
+                <Header className="site-layout-background" style={{ padding: '10px' }} >
                     {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                     className: 'trigger',
                     onClick: ()=>{this.toggle()},

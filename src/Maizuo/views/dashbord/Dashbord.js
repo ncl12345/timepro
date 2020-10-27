@@ -71,7 +71,7 @@ export default class Dashbord extends Component {
                 <SideBar></SideBar>
                         <Layout className="site-layout">
                             <TopHeader></TopHeader>
-                            <Content>
+                            <Content style={{padding:'10px'}}> 
                                 <Switch>
                                     {
                                         routes.map((item, i) => <Route key={i} path={item.path}  component={item.component}></Route>)

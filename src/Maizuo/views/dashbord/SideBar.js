@@ -104,7 +104,12 @@ const menus = [{
     menuAction(menus) {
         return menus.map(item=>{
             if (item.children){
-                return  <SubMenu key={item.path} icon={<UserOutlined />} title={item.name}>
+                return <SubMenu key = {
+                    item.path
+                }
+                icon = {
+                        <UserOutlined
+                />} title={item.name}>
                             {
                                 this.menuAction(item.children)
                             }
