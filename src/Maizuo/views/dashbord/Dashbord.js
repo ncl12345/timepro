@@ -60,9 +60,11 @@ const routes = [
     },
  
 ]
-
+    
 export default class Dashbord extends Component {
+
     render() {
+        
         // let {
         //     roleType
         // } = JSON.parse(localStorage.getItem('token'))
@@ -71,7 +73,7 @@ export default class Dashbord extends Component {
                 <SideBar></SideBar>
                         <Layout className="site-layout">
                             <TopHeader></TopHeader>
-                            <Content style={{padding:'10px'}}> 
+                            <Content style={{padding:'10px',background:"white"}}> 
                                 <Switch>
                                     {
                                         routes.map((item, i) => <Route key={i} path={item.path}  component={item.component}></Route>)
@@ -94,7 +96,6 @@ export default class Dashbord extends Component {
                             </Content>
                         </Layout>
                     </Layout>
-
         )
     }
 }

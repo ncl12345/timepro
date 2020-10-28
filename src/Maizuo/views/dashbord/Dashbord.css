@@ -9,6 +9,10 @@
 #components-layout-demo-custom-trigger .trigger:hover {
     color: #1890ff;
 }
+.ant-layout .site-layout{
+    height: 100%;
+    background: #fff;
+}
 
 #components-layout-demo-custom-trigger .logo {
     height: 32px;
