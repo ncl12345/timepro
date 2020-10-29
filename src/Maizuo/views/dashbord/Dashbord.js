@@ -17,6 +17,7 @@ import Movies from '../movieManage/MovieManage'
 import MovieList from '../movieManage/MovieList'
 import Pai from '../echarts/Pai'
 import Bar from '../echarts/Bar'
+import MovieUpdata from '../movieManage/MovieUpdate'
 import {
     Layout
 } from 'antd';
@@ -48,6 +49,10 @@ const routes = [
         path: "/movie-manage/list",
         component: MovieList,
         permission: [3]
+    }, {
+        path: "/movie-manage/updata",
+        component: MovieUpdata,
+        permission: [3]
     },
     {
         path: "/statistical-analysis/pai",
@@ -60,9 +65,11 @@ const routes = [
     },
  
 ]
-
+    
 export default class Dashbord extends Component {
+
     render() {
+        
         // let {
         //     roleType
         // } = JSON.parse(localStorage.getItem('token'))
@@ -71,7 +78,12 @@ export default class Dashbord extends Component {
                 <SideBar></SideBar>
                         <Layout className="site-layout">
                             <TopHeader></TopHeader>
-                            <Content style={{padding:'10px'}}> 
+                            < Content style = {
+                                {
+                                    padding: '10px',
+                                    // background: "#91d5ff"
+                                }
+                            } >
                                 <Switch>
                                     {
                                         routes.map((item, i) => <Route key={i} path={item.path}  component={item.component}></Route>)
@@ -94,7 +106,6 @@ export default class Dashbord extends Component {
                             </Content>
                         </Layout>
                     </Layout>
-
         )
     }
 }

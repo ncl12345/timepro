@@ -1,4 +1,4 @@
-#components-layout-demo-custom-trigger .trigger {
+/* #components-layout-demo-custom-trigger .trigger {
     font-size: 18px;
     line-height: 64px;
     padding: 0 24px;
@@ -9,6 +9,10 @@
 #components-layout-demo-custom-trigger .trigger:hover {
     color: #1890ff;
 }
+.ant-layout .site-layout{
+    height: 100%;
+    background: #fff;
+}
 
 #components-layout-demo-custom-trigger .logo {
     height: 32px;
@@ -18,4 +22,4 @@
 
 .site-layout .site-layout-background {
     background: #fff;
-}
+} */
