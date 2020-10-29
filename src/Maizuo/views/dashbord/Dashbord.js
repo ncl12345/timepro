@@ -17,6 +17,7 @@ import Movies from '../movieManage/MovieManage'
 import MovieList from '../movieManage/MovieList'
 import Pai from '../echarts/Pai'
 import Bar from '../echarts/Bar'
+import MovieUpdata from '../movieManage/MovieUpdate'
 import {
     Layout
 } from 'antd';
@@ -48,6 +49,10 @@ const routes = [
         path: "/movie-manage/list",
         component: MovieList,
         permission: [3]
+    }, {
+        path: "/movie-manage/updata",
+        component: MovieUpdata,
+        permission: [3]
     },
     {
         path: "/statistical-analysis/pai",
@@ -73,7 +78,12 @@ export default class Dashbord extends Component {
                 <SideBar></SideBar>
                         <Layout className="site-layout">
                             <TopHeader></TopHeader>
-                            <Content style={{padding:'10px',background:"white"}}> 
+                            < Content style = {
+                                {
+                                    padding: '10px',
+                                    // background: "#91d5ff"
+                                }
+                            } >
                                 <Switch>
                                     {
                                         routes.map((item, i) => <Route key={i} path={item.path}  component={item.component}></Route>)
