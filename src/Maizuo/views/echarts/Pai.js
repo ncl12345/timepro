@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import echarts from 'echarts'
+
+
+
 export default class Pai extends Component {
     render() {
         return (
@@ -14,7 +17,6 @@ export default class Pai extends Component {
                 }
             }
             >
-                Pai
             </div>
         )
     }
