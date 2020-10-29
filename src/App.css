@@ -1,0 +1,15 @@
+#root{
+  height: 100%;
+}
+.login-form{
+  background: rgb(131, 178, 226,.5);
+  height:20rem;
+  width:30rem;
+  padding:50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left:-15rem;
+  margin-top:-10rem;
+  border: 1px solid skyblue;
+}

@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
+import CollapsedAction from '../../redux/actionCreator/CollapsedAction'
 import {
     Layout,
 } from 'antd';
@@ -11,14 +13,12 @@ import Icon from '@ant-design/icons';
 const {
     Header,
 } = Layout;
-export default class HeaderBar extends Component {
-    state = {
-        collapsed: true
-    }
+
+ class HeaderBar extends Component {
     render() {
         return (
-                <Header className="site-layout-background" style={{ padding: '10px'}} >
-                    {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                <Header className="site-layout-background" style={{ padding: '10px' }} >
+                    {React.createElement(this.props.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                     className: 'trigger',
                     onClick: ()=>{this.toggle()},
                     })}
@@ -27,9 +27,18 @@ export default class HeaderBar extends Component {
             )
     }
     toggle(){
-        this.setState({
-            collapsed:!this.state.collapsed
-        })
+        this.props.CollapsedAction()
     }
     
 }
+
+const mapStateToProps =(storeState)=>{
+    return {
+        collapsed : storeState.CollapsedReducer.isCollapsed
+    }
+}
+const mapDispatchToProps = {
+    CollapsedAction : CollapsedAction
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(HeaderBar)

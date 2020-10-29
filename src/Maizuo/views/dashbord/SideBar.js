@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
 import {
     withRouter
 } from 'react-router'
@@ -72,14 +73,14 @@ const menus = [{
         }
     ]
  class SideBar extends Component {
-    state={
+    /* state={
         collapsed:false
-    }
+    } */
     render() {
          let openKeys = ['/' + this.props.location.pathname.split('/')[1]]
          let selectKeys = [this.props.location.pathname]
         return (
-            <Sider className="site-layout-background" width={200}>
+            <Sider className="site-layout-background" width={200} collapsible collapsed={this.props.collapsed}>
             <Menu
                 mode="inline"
                 defaultOpenKeys = {
@@ -125,4 +126,11 @@ const menus = [{
 
     }
 }
-export default withRouter(SideBar)
+
+const mapStateToProps = (storeState)=>{
+    return {
+        collapsed :storeState.CollapsedReducer.isCollapsed
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(SideBar))
