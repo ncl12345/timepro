@@ -262,8 +262,7 @@ formRef = React.createRef();
                         this.normFile
                     }
                     noStyle >
-                    < Upload.Dragger name = "file"
-                    action = "/api/test/file/upload" >
+                    < Upload.Dragger name = "file" customRequest={this.customRequest}>
                         <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                         </p>
@@ -302,6 +301,10 @@ formRef = React.createRef();
           //  show:true
       //  })
     //}
+    customRequest(options){
+        debugger;
+        console.log(options)
+    }
   
     changeIt(res,type){
         if(res){

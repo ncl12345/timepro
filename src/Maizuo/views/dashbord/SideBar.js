@@ -9,6 +9,9 @@ import {
 } from 'antd';
 import {
     UserOutlined,
+    PieChartOutlined,
+    PlaySquareOutlined,
+BellOutlined
 
 } from '@ant-design/icons';
 
@@ -27,6 +30,7 @@ const menus = [{
             path: '/user-manage', //路径不渲染但是要做key值
             name: '人员管理',
             permission: [3],
+            icon:<UserOutlined/>,
             children: [
                 {
                 path: '/user-manage/rights',
@@ -43,9 +47,10 @@ const menus = [{
             path: '/movie-manage', //路径不渲染但是要做key值
             name: '电影管理',
             permission: [3],
+            icon:<PlaySquareOutlined/>,
             children: [{
                 path: '/movie-manage/manage',
-                name: '电影',
+                name: '添加影片',
                 permission: [3]
             }, 
             {
@@ -59,14 +64,32 @@ const menus = [{
             path: '/statistical-analysis', //路径不渲染但是要做key值
             name: '统计分析',
             permission: [3],
+            icon:<PieChartOutlined/>,
             children: [{
                     path: '/statistical-analysis/pai',
-                    name: '图',
+                    name: '票房解读',
                     permission: [3]
                 },
                 {
                     path: '/statistical-analysis/bar',
-                    name: '表',
+                    name: '影片解读',
+                    permission: [3]
+                },
+            ]
+        },
+        {
+            path: '/msg-management', //路径不渲染但是要做key值
+            name: '评论管理',
+            permission: [3],
+            icon:<BellOutlined />,
+            children: [{
+                    path: '/message/addMsg',
+                    name: '控评',
+                    permission: [3]
+                },
+                {
+                    path: '/message/comment',
+                    name: '评论',
                     permission: [3]
                 },
             ]
@@ -109,8 +132,10 @@ const menus = [{
                     item.path
                 }
                 icon = {
-                        <UserOutlined
-                />} title={item.name}>
+                    item.icon
+                
+                }
+                title={item.name}>
                             {
                                 this.menuAction(item.children)
                             }
