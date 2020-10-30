@@ -7,7 +7,8 @@ export default class Users extends Component {
     state = {
         dataList:[],
         rolesList:[],
-        visibleAdd:false
+        visibleAdd:false,
+        text:""
     }
     addForm = React.createRef()
     updateForm = React.createRef()
@@ -47,7 +48,7 @@ export default class Users extends Component {
     {
         title:"用户状态",
         render:(item)=>{
-            return <Switch checked={item.status} disabled={item.default} onChange={()=>this.handleSwitchChange(item.id)}></Switch>
+            return <Switch checked={item.status} disabled={item.default} onChange={()=>this.handleSwitchChange(item._id)}></Switch>
         }
 
     },
@@ -56,7 +57,7 @@ export default class Users extends Component {
         render:(item)=>{
             return <div>
                 <Button shape="round" onClick={()=>this.handleUpdateButton(item)}>编辑</Button>
-                <Button danger shape="round" onClick={()=>this.handleDelete(item.id)}>删除</Button>
+                <Button danger shape="round" onClick={()=>this.handleDelete(item._id)}>删除</Button>
             </div>
         }
     }
@@ -65,8 +66,11 @@ export default class Users extends Component {
         return (
             <div>
                 <Button type="primary" shape="round" onClick={()=>this.handleAddButton()}>添加用户</Button>
-                <input type="text" placeholder="请输入用户名"></input>
-                <Table columns={this.columns} dataSource={this.state.dataList} rowKey={(item)=>item.id} onChange={()=>this.onChange} />
+                <div>
+                    <input type="text"  placeholder="请输入用户名" onChange={(ev)=>{this.handleSearch(ev)}} value={this.state.text} style={{color:"black"}}></input>
+                    <button >搜索</button>
+                </div>
+                <Table columns={this.columns} dataSource={this.state.dataList} rowKey={(item)=>item._id} onChange={()=>this.onChange} />
                 <Modal
                     title="添加用户"
                     onText="确定"
@@ -168,7 +172,7 @@ export default class Users extends Component {
                         <Select>
                             {
                             this.state.rolesList.map(item=>
-                            <Option key={item.id} value={item.roleType}>{item.rolename}</Option>)
+                            <Option key={item._id} value={item.roleType}>{item.rolename}</Option>)
                             }
                         </Select>
                         </Form.Item>
@@ -180,15 +184,21 @@ export default class Users extends Component {
     onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
+    handleSearch(ev){
+        
+      this.setState({
+          text : ev.target.value
+      })
+    }
     componentDidMount(){
-        axios.get('http://localhost:5001/users').then(res=>{
+        axios.get('/user/getUser').then(res=>{
             //console.log(res.data)
             this.setState({
                 dataList:res.data
             })
         })
 
-        axios.get('http://localhost:5001/roles').then(res=>{
+        axios.get('/role/getRole').then(res=>{
            // console.log(res.data)
             this.setState({
                 rolesList : res.data
@@ -197,12 +207,13 @@ export default class Users extends Component {
     }
     //删除操作
     handleDelete(id){  
+        console.log(id)
         //在页面删除
         this.setState({
-            dataList : this.state.dataList.filter((item)=>item.id !==id)
+            dataList : this.state.dataList.filter((item)=>item._id !==id)
         })
         //在数据库中删除
-        axios.delete(`http://localhost:5001/users/${id}`)
+        axios.delete('/user/deleteUser',{params:{id}})
     }
     //添加用户按钮
     handleAddButton(){
@@ -221,7 +232,7 @@ export default class Users extends Component {
                 visibleAdd:false
             })
             //添加数据
-            axios.post('http://localhost:5001/users',{
+            axios.post('/user/addUser',{
                 username,
                 rolename,
                 age,
@@ -266,7 +277,7 @@ export default class Users extends Component {
             //更新页面数据
             this.setState({
                 dataList:this.state.dataList.map(item=>{
-                    if(item.id===this.currentUpdate.id){
+                    if(item._id===this.currentUpdate._id){
                        return {
                         ...item,
                         ...values,
@@ -278,7 +289,8 @@ export default class Users extends Component {
                 visibleUpdate:false
             })
             //更新数据库
-            axios.put(`http://localhost:5001/users/${this.currentUpdate.id}`,{
+            axios.post(`/user/updateUser`,{
+                id :this.currentUpdate._id,
                 ...this.currentUpdate,
                 ...values,
                 rolename
@@ -290,7 +302,7 @@ export default class Users extends Component {
         //在页面上进行修改
         this.setState({
             dataList:this.state.dataList.map(item=>{
-                if(item.id===id){
+                if(item._id===id){
                     //不能改变原状态，先将所点击的这一项展开，将状态取反在return出去 
                     return {
                         ...item,
@@ -303,8 +315,9 @@ export default class Users extends Component {
         })
         //在数据库中进行修改
         //根据id找到当前操作的那项
-        let item = this.state.dataList.filter(item=>item.id===id)[0]
-        axios.put(`http://localhost:5001/users/${id}`,{
+        let item = this.state.dataList.filter(item=>item._id===id)[0]
+        axios.post(`/user/updateUser`,{
+            id,
             ...item,
             status : !item.status
         })

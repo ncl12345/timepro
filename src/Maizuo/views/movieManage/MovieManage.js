@@ -401,7 +401,7 @@ formRef = React.createRef();
                     }
                 // }
                 
-                axios.post('http://localhost:5001/nowplaying', ms).then(res => {
+                axios.post('/detail/addDetail', ms).then(res => {
                     message.success({content: '提交成功!'})
                 })
             }else{
@@ -420,7 +420,7 @@ formRef = React.createRef();
                     wantedCount:1243,
                 }
                 console.log(ms, 'ms')
-                axios.post('http://localhost:5001/commingSoon', ms).then(res => {
+                axios.post('/detail/addDetail', ms).then(res => {
                     message.success({
                         content: '提交成功!'
                     })

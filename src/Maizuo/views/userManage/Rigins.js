@@ -8,10 +8,13 @@ class Rigins extends Component {
     render() {
         const columns = [
             //form表单在底层自己做好了map，因此直接指定每次遍历时需要的值就行
-            {
+            /* {
               title: '#',
-              dataIndex: 'id'//数据库中的字段名
-            },
+              dataIndex: '_id',//数据库中的字段名
+              render:(_id)=>{
+                
+              }
+            }, */
             {
               title: '权限名称',
               dataIndex: 'title'
@@ -62,7 +65,7 @@ class Rigins extends Component {
             list : this.props.list.filter(item=>item.id !==id)
         })
         //数据库中删除
-        axios.delete(`http://localhost:5001/rights/${id}`)
+        axios.delete('/right/deleteRight,{params:{id}}')
     }
 
 }
