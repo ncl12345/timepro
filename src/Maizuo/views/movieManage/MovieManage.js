@@ -135,14 +135,15 @@ formRef = React.createRef();
                     }
                     name="validate_other"
                     {...formItemLayout}
-                    // onFinish={onFinish}
                     initialValues={{
                         'input-number': 3,
                         'checkbox-group': ['A', 'B'],
                         rate: 3.5,
                     }}
+                    onFinish = {
+                        this.onFinish
+                    }
                     >
-                    
                     <Form.Item label="电影信息">
                         <span className="ant-form-text">新增</span>
                     </Form.Item>
@@ -211,11 +212,6 @@ formRef = React.createRef();
                                     return  <Option value={item.value} key={item.value}>{item.name}</Option>
                                 })
                             }
-                            {/* <Option value="isDMAX">DMAX</Option>
-                            <Option value="isEggHunt">EggHunt</Option>
-                            <Option value="isIMAX">IMAX</Option>
-                            <Option value="isIMAX3D">IMAX3D</Option>
-                            <Option value="isTicket">Ticket</Option> */}
                         </Select>
                     </Form.Item>
 
@@ -261,9 +257,9 @@ formRef = React.createRef();
                     getValueFromEvent = {
                         this.normFile
                     }
+                    name = 'file'
                     noStyle >
-                    < Upload.Dragger name = "file"
-                    action = "/api/test/file/upload" >
+                    < Upload.Dragger >
                         <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                         </p>
@@ -275,9 +271,7 @@ formRef = React.createRef();
                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
                     < Button type = "primary"
                     htmlType = "submit"
-                    onClick = {
-                        this.handleSubmit
-                    } >
+                    >
                     Submit
                     </Button>
                 </Form.Item>
@@ -297,17 +291,11 @@ formRef = React.createRef();
             </div>
         )
     }
-    //handleModel(){
-        //this.setState({
-          //  show:true
-      //  })
-    //}
-  
     changeIt(res,type){
         if(res){
             if(type===1){
                 let actorsArr = []
-            console.log(res,1)
+                console.log(res,1)
 
                 this.setState({
                 actors: res
@@ -342,8 +330,6 @@ formRef = React.createRef();
                 this.setState({
                     directorArr
                 })
-
-
             }
             
         }
@@ -363,10 +349,8 @@ formRef = React.createRef();
             modelType:2
         })
     }
-    handleSubmit=()=>{
-        this.formRef.current.validateFields().then(values => {
-                console.log(values)
-
+    onFinish = values =>{
+                console.log(values,'搜索')
         var rmonth=moment(values.date._d).format("MM")
         var rDay = moment(values.date._d).format("DD")
         var releaseDate=moment(values.date._d).format('MM DD YYYY')+'上映'
@@ -398,15 +382,15 @@ formRef = React.createRef();
                         r: values.r*20,
                         NearestCinemaCount: values.NearestCinemaCount,
                         NearestShowtimeCount: values.NearestShowtimeCount,
+                        file: values.file
                     }
                 // }
-                
-                axios.post('http://localhost:5001/nowplaying', ms).then(res => {
+                console.log('ms2', ms)
+                axios.post('/detail/addDetail', ms).then(res => {
                     message.success({content: '提交成功!'})
                 })
             }else{
                 let ms = {
-                    image:this.state.image,
                     rDay,
                     rmonth,
                     releaseDate,
@@ -418,21 +402,21 @@ formRef = React.createRef();
                     title: values.titleCn,
                     r: values.r*20,
                     wantedCount:1243,
+                    file: values.file
+                    
                 }
-                console.log(ms, 'ms')
-                axios.post('http://localhost:5001/commingSoon', ms).then(res => {
+                console.log('ms1',ms)
+                axios.post('/detail/addDetail',JSON.stringify(ms)).then(res => {
                     message.success({
                         content: '提交成功!'
                     })
                 })
             }
-        })
     }
     normFile = e => {
         this.setState({
             image: e
         })
-        console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
@@ -443,23 +427,6 @@ formRef = React.createRef();
             return lodash.isUndefined(objValue) ? srcValue : objValue;
         }
         var defaults = lodash.partialRight(lodash.assignWith, customizer);
-
         return defaults(...arr);
     }
 }
-
-
-{/* "id": 1,
-"rmonth": 9,
-"rDay": 20,
-"title": "小Q",
-"image": "http://img5.mtime.cn/mt/2019/08/20/184519.87782615_1280X720X2.jpg",
-"wantedCount": 193,
-"type": "剧情",
-"director": "罗永昌",
-"actor1": "任达华",
-"actor2": "梁咏琪",
-"videoCount": 3 */}
-
-
-

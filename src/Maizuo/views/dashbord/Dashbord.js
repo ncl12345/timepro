@@ -21,6 +21,8 @@ import MovieUpdata from '../movieManage/MovieUpdate'
 import {
     Layout
 } from 'antd';
+import MsgList from '../comment/MsgList'
+import MsgAdd from '../comment/MsgAdd'
 const {
     Content
 } = Layout;
@@ -50,7 +52,7 @@ const routes = [
         component: MovieList,
         permission: [3]
     }, {
-        path: "/movie-manage/updata",
+        path: "/movie-manage/updata/:id",
         component: MovieUpdata,
         permission: [3]
     },
@@ -61,6 +63,15 @@ const routes = [
     }, {
         path: "/statistical-analysis/bar",
         component: Bar,
+        permission: [3]
+    },
+    {
+        path: "/message/comment",
+        component: MsgList,
+        permission: [3]
+    }, {
+        path: "/message/addMsg",
+        component: MsgAdd,
         permission: [3]
     },
  

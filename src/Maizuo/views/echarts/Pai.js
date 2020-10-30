@@ -48,8 +48,8 @@ export default class Pai extends Component {
 
             let option = {
             title: {
-                text: '在中国租个房子有多贵？',
-                subtext: '市中心一室月租费（数据来源：https://www.numbeo.com）'
+                text: '全国票房分析',
+                subtext: '谁最喜欢看电影'
             },
             legend: {
                 show: true,
