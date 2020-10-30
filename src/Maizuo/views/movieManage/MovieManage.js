@@ -114,13 +114,6 @@ const locationValue=[
         value: 'Kingdom'
     }
 ]
-   const normFile = e => {
-       console.log('Upload event:', e);
-       if (Array.isArray(e)) {
-           return e;
-       }
-       return e && e.fileList;
-   };
 export default class MovieManage extends Component {
 formRef = React.createRef();
     state={
@@ -275,7 +268,12 @@ formRef = React.createRef();
                     </Form.Item>
                 </Form.Item> */}
                 <Form.Item label="Dragger">
-                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+                    < Form.Item name = "dragger"
+                    valuePropName = "fileList"
+                    getValueFromEvent = {
+                        this.normFile
+                    }
+                    noStyle name = "file" >
                     < Upload.Dragger name = "file"
                     action = "/detail/addPic" >
                         <p className="ant-upload-drag-icon">
@@ -368,6 +366,17 @@ formRef = React.createRef();
         })
     }
     onFinish = values =>{
+        const formData = new FormData();
+    
+            formData.append('file', this.image);
+        console.log(formData)
+
+
+
+
+
+
+
                 console.log(values,'搜索')
         var rmonth=moment(values.date._d).format("MM")
         var rDay = moment(values.date._d).format("DD")
