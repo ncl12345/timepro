@@ -114,7 +114,13 @@ const locationValue=[
         value: 'Kingdom'
     }
 ]
-   
+   const normFile = e => {
+       console.log('Upload event:', e);
+       if (Array.isArray(e)) {
+           return e;
+       }
+       return e && e.fileList;
+   };
 export default class MovieManage extends Component {
 formRef = React.createRef();
     state={
@@ -251,7 +257,7 @@ formRef = React.createRef();
                 <Form.Item name="r" label="排名">
                     < Rate allowHalf={true}/ >
                 </Form.Item>
-                <Form.Item label="Dragger">
+                {/* <Form.Item label="Dragger">
                     < Form.Item name = "dragger"
                     valuePropName = "fileList"
                     getValueFromEvent = {
@@ -260,6 +266,18 @@ formRef = React.createRef();
                     name = 'file'
                     noStyle >
                     < Upload.Dragger >
+                        <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                        </p>
+                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                        <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+                    </Upload.Dragger>
+                    </Form.Item>
+                </Form.Item> */}
+                <Form.Item label="Dragger">
+                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+                    < Upload.Dragger name = "file"
+                    action = "/detail/addPic" >
                         <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                         </p>
