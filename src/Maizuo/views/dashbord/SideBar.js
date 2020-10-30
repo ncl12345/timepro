@@ -58,6 +58,11 @@ const menus = [{
                 name: '电影列表',
                 permission: [3]
             },
+            {
+                path: '/movie-manage/cinema',
+                name: '影院信息',
+                permission: [3]
+            },
         ]
         },
         {

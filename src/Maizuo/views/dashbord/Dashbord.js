@@ -14,6 +14,7 @@ import NotFound from '../notFound/NotFound'
 import Users from '../userManage/Users'
 import Home from '../home/Home'
 import Movies from '../movieManage/MovieManage'
+import CinemaList from '../movieManage/CinemaList'
 import MovieList from '../movieManage/MovieList'
 import Pai from '../echarts/Pai'
 import Bar from '../echarts/Bar'
@@ -46,14 +47,18 @@ const routes = [
         path: "/movie-manage/manage",
         component: Movies,
         permission: [3]
+    }, {
+        path: "/movie-manage/cinema",
+        component: CinemaList,
+        permission: [3]
     },
     {
         path: "/movie-manage/list",
         component: MovieList,
         permission: [3]
     }, {
-        path: "/movie-manage/updata/:id",
-        component: MovieUpdata,
+        path: "/movie-manage/cinema",
+        component: CinemaList,
         permission: [3]
     },
     {

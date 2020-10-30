@@ -118,8 +118,8 @@ export default class MovieManage extends Component {
 formRef = React.createRef();
     state={
         show:false,
-        actorsArr:[],
-        directorArr:[],
+        // actorsArr:[],
+        // directorArr:[],
         directors:[],
         actors:[],
         modelType:1,
@@ -268,14 +268,13 @@ formRef = React.createRef();
                     </Form.Item>
                 </Form.Item> */}
                 <Form.Item label="Dragger">
-                    < Form.Item name = "dragger"
+                    < Form.Item name = "file"
                     valuePropName = "fileList"
                     getValueFromEvent = {
                         this.normFile
                     }
-                    noStyle name = "file" >
-                    < Upload.Dragger name = "file"
-                    action = "/detail/addPic" >
+                    noStyle  >
+                    < Upload.Dragger>
                         <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                         </p>
@@ -310,41 +309,12 @@ formRef = React.createRef();
     changeIt(res,type){
         if(res){
             if(type===1){
-                let actorsArr = []
-                console.log(res,1)
-
                 this.setState({
                 actors: res
                 })
-                res.forEach(
-                    (item, index) => {
-                        actorsArr.push({
-                            ['actor' + index]: item
-                        })
-                    }
-                )
-                actorsArr = this.arrToObj(actorsArr)
-                console.log(actorsArr,1)
-                this.setState({
-                    actorsArr
-                })
             } else if (type === 2) {
-                let directorArr = []
-                console.log(res, 2)
                 this.setState({
                     directors: res
-                })
-                res.forEach(
-                    (item, index) => {
-                        directorArr.push({
-                            ['director' + index]: item
-                        })
-                    }
-                )
-                directorArr = this.arrToObj(directorArr)
-                console.log(directorArr, 2)
-                this.setState({
-                    directorArr
                 })
             }
             
@@ -366,81 +336,56 @@ formRef = React.createRef();
         })
     }
     onFinish = values =>{
-        const formData = new FormData();
-    
-            formData.append('file', this.image);
-        console.log(formData)
-
-
-
-
-
-
-
-                console.log(values,'搜索')
+        console.log(values, 'values')
         var rmonth=moment(values.date._d).format("MM")
         var rDay = moment(values.date._d).format("DD")
         var releaseDate=moment(values.date._d).format('MM DD YYYY')+'上映'
-
-                let type =  values.SelectType.join('/')
-                var info = infoValue.map(item => {
-                    return item.value
-                })
-                let arrTrue = []
-                let arrFalse = []
-                for (var i = 0; i < info.length; i++) {
-                    for (var j = 0; j < values.selectInfo.length; j++) {
-                        if (info[i] === values.selectInfo[j]) {
-                            arrTrue.push(values.selectInfo[j])
-                        }
-                    }
-                }
-                arrFalse = lodash.differenceBy(info, values.selectInfo)
-                console.log(arrFalse, '不同')
-                let arrTures = arrTrue.map(item => true)
-                let arrFalses = arrFalse.map(item => false)
-                arrTrue = lodash.zipObject(arrTrue, arrTures)
-                arrFalse = lodash.zipObject(arrFalse, arrFalses)
-                if (!values.switch) {
-                    let ms = {
-                        ...arrTrue,
-                        ...arrFalse,
-                        t: values.titleCn,
-                        r: values.r*20,
-                        NearestCinemaCount: values.NearestCinemaCount,
-                        NearestShowtimeCount: values.NearestShowtimeCount,
-                        file: values.file
-                    }
-                // }
-                console.log('ms2', ms)
-                axios.post('/detail/addDetail', ms).then(res => {
-                    message.success({content: '提交成功!'})
-                })
-            }else{
-                let ms = {
-                    rDay,
-                    rmonth,
-                    releaseDate,
-                    type,
-                    ...this.state.actorsArr,
-                    ...this.state.directorArr,
-                    ...arrTrue,
-                    ...arrFalse,
-                    title: values.titleCn,
-                    r: values.r*20,
-                    wantedCount:1243,
-                    file: values.file
-                    
-                }
-                console.log('ms1',ms)
-                axios.post('/detail/addDetail',JSON.stringify(ms)).then(res => {
-                    message.success({
-                        content: '提交成功!'
-                    })
-                })
+        if (!values.switch) {
+            let ms = {
+                t: values.titleCn,
+                r: values.r*20,
+                NearestCinemaCount: values.NearestCinemaCount,
+                NearestShowtimeCount: values.NearestShowtimeCount,
+                file: values.file,
+                rDay,
+                rmonth,
+                releaseDate,
+                title: values.titleCn,
+                r: values.r * 20,
+                wantedCount: 1243,
+                file: values.file,
+                type: values.SelectType,
+                directors: this.state.directors,
+                actors: this.state.actors
             }
+        // }
+        console.log('ms2', ms)
+        axios.post('/detail/addDetail', ms).then(res => {
+            message.success({content: '提交成功!'})
+        })
+    }else{
+        let ms = {
+            rDay,
+            rmonth,
+            releaseDate,
+            title: values.titleCn,
+            r: values.r*20,
+            wantedCount:1243,
+            file: values.file,
+            type: values.SelectType,
+            directors: this.state.directors,
+            actors: this.state.actors
+        }
+        console.log('ms1',ms)
+        axios.post('/detail/addDetail',JSON.stringify(ms)).then(res => {
+            message.success({
+                content: '提交成功!'
+            })
+        })
+    }
     }
     normFile = e => {
+        console.log(e,e)
         this.setState({
             image: e
         })
