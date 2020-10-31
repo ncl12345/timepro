@@ -5,26 +5,26 @@ export default class Bar extends Component {
     myChart=null
     state={
         info:[{
-                    name: 'Forest',
+                    name: '我和我的家乡',
                     type: 'bar',
                     barGap: 0,
                     // label: labelOption,
                     data: [320, 332, 301, 334, 390]
                 },
                 {
-                    name: 'Steppe',
+                    name: '八号房的礼物',
                     type: 'bar',
                     // label: labelOption,
                     data: [220, 182, 191, 234, 290]
                 },
                 {
-                    name: 'Desert',
+                    name: '月半爱丽丝',
                     type: 'bar',
                     // label: labelOption,
                     data: [150, 232, 201, 154, 190]
                 },
                 {
-                    name: 'Wetland',
+                    name: '一点就到家',
                     type: 'bar',
                     // label: labelOption,
                     data: [98, 77, 101, 99, 40]
@@ -146,7 +146,7 @@ export default class Bar extends Component {
                 }
             },
             legend: {
-                data: ['Forest', 'Steppe', 'Desert', 'Wetland']
+                data: ['我和我的家乡', '八号房的礼物', '月半爱丽丝', '一点就到家']
             },
             toolbox: {
                 show: true,
@@ -178,7 +178,7 @@ export default class Bar extends Component {
                 axisTick: {
                     show: false
                 },
-                data: ['2012', '2013', '2014', '2015', '2016'],
+                data: ['北京', '上海', '南京', '武汉', '大连'],
                 axisLine: {
                         lineStyle: {
                             color: {
