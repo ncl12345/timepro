@@ -3,6 +3,7 @@ import { Table, Tag, Space,Button } from 'antd';
 import {Tabs} from 'antd'
 import { withRouter } from 'react-router-dom';
 import MovieTabsAction from '../../redux/actionCreator/MovieTabsAction'
+import axios from 'axios'
 import {
   connect
 } from 'react-redux';
@@ -18,8 +19,8 @@ const {
     nowColumns = [ {
       title: '影片名',
       
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'ssname',
+      key: 'ssname',
       render: text => <a>{text}</a>,
     }]
   nowColumns = [
@@ -94,56 +95,56 @@ const {
     comingColumns = [
     {
       title: '影片名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'title',
+      key: 'title',
       render: text => <a>{text}</a>,
       // width:,
     },
     {
       title: '导演',
-      dataIndex: 'director',
-      key: 'director',
+      dataIndex: 'directors',
+      key: 'directors',
     },
     {
       title: '主演',
-      dataIndex: 'actor',
-      key: 'actor',
+      dataIndex: 'actors',
+      key: 'actors',
     },
     {
         title: '上映时间',
-        dataIndex: 'ticket',
-        key: 'ticket',
+        dataIndex: 'releaseDate',
+        key: 'releaseDate',
     },
     {
       title: '评分',
-      key: 'tags',
-      dataIndex: 'tags',
+      key: 'r',
+      dataIndex: 'r',
       sorter: {
         compare: (a, b) => a.chinese - b.chinese,
         multiple: 3,
       },
-      render: tags => (
-        <>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      // render: tags => (
+      //   <>
+      //     {tags.map(tag => {
+      //       let color = tag.length > 5 ? 'geekblue' : 'green';
+      //       if (tag === 'loser') {
+      //         color = 'volcano';
+      //       }
+      //       return (
+      //         <Tag color={color} key={tag}>
+      //           {tag.toUpperCase()}
+      //         </Tag>
+      //       );
+      //     })}
+      //   </>
+      // ),
     },
   {
     title: 'Action',
     key: 'action',
     render: (item) => (
       <Space size="middle">
-        <Button  onClick={()=>this.updateComing(item.id)} >更新</Button>
+        <Button  onClick={()=>this.updateComing(item)} >更新</Button>
         <Button  onClick={()=>this.comingComment(item.id)}>评论</Button>
         <Button  onClick={()=>this.showComing(item.id)} danger>上架</Button>
       </Space>
@@ -174,7 +175,7 @@ const {
           < TabPane tab = "即将上映"
           key = "1"
           >
-            <Table columns={this.comingColumns} dataSource={this.state.comingData} />
+          <Table columns={this.comingColumns} dataSource={this.state.comingData} />
           </TabPane>
           <TabPane tab="正在热映" key="2">
               <Table columns = {
@@ -201,21 +202,20 @@ const {
     )
 
   }
+
+
  
 
   componentDidMount() {
+    axios.get('/detail/comingsoonAll').then(
+      res=>{
+        console.log(res,'res')
+        this.setState({
+          comingData: res.data
+        })
+      }
+    )
     console.log(this.props.isShow,'uuu')
-    this.setState({
-      comingData :[{
-        name: 'wohe',
-        id: '1',
-        key: '1',
-        ticket: 'John Brown',
-        actor: 32,
-        director: 'New ',
-        tags: ['nice', 'developer'],
-      }, ]
-    })
     this.setState({
       nowData: [{
           name: 'wohe',
@@ -253,9 +253,9 @@ const {
   comingComment(id){
     console.log('handleComingComment', id)
   }
-  updateComing(id) {
-    console.log('updataNow', id)
-    this.props.history.push( `/movie-manage/updata/${id}`)
+  updateComing(item) {
+    console.log('updataNow', item)
+    this.props.history.push(`/movie-manage/updata/${item._id}`)
   }
   showComing(id){
     console.log('showComingUpdata', id)

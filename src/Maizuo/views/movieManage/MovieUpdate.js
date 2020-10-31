@@ -8,19 +8,32 @@ import {
     InputNumber,
     Switch,
     Button,
-    Upload,
     Rate,
     Input,
     DatePicker,
+    Upload,
+    Modal
 } from 'antd';
-import {
-    InboxOutlined
-} from '@ant-design/icons';
 import MovieModel from './MovieModel';
+import { withRouter } from 'react-router-dom';
+
+import {
+    PlusOutlined
+} from '@ant-design/icons';
+// function getBase64(file) {
+//     return new Promise((resolve, reject) => {
+//         const reader = new FileReader();
+//         reader.readAsDataURL(file);
+//         reader.onload = () => resolve(reader.result);
+//         reader.onerror = error => reject(error);
+//     });
+// }
 const {
     Option
 } = Select;
-
+const {
+    TextArea
+} = Input;
 const formItemLayout = {
     labelCol: {
         span: 6
@@ -60,61 +73,34 @@ const typeValue=[
     }
     
 ]
-const infoValue = [
-{
-    name: '3D',
-    value: 'is3D'
-},
-{
-    name: 'DMAX',
-    value: 'isDMAX'
-},
-{
-    name: 'EggHunt',
-    value: 'isEggHunt'
-},
-{
-    name: 'IMAX',
-    value: 'isIMAX'
-},
-{
-    name: 'IMAX3D',
-    value: 'isIMAX3D'
-},
-{
-    name: 'Ticket',
-    value: 'isTicket'
-}
-]
 
 
-const locationValue=[
-    {
-        name: '中国',
-        value: 'China'
+const infoValue = [{
+        name: '3D',
+        value: 'is3D'
     },
     {
-        name: '美国',
-        value: 'America'
+        name: 'DMAX',
+        value: 'isDMAX'
     },
     {
-        name: '日本',
-        value: 'Japan'
+        name: 'EggHunt',
+        value: 'isEggHunt'
     },
     {
-        name: '澳大利亚',
-        value: 'Austrilia'
+        name: 'IMAX',
+        value: 'isIMAX'
     },
     {
-        name: '加拿大',
-        value: 'Canada'
+        name: 'IMAX3D',
+        value: 'isIMAX3D'
     },
     {
-        name: '英国',
-        value: 'Kingdom'
+        name: 'Ticket',
+        value: 'isTicket'
     }
 ]
-export default class MovieManage extends Component {
+class MovieManage extends Component {
 formRef = React.createRef();
     state={
         show:false,
@@ -124,8 +110,18 @@ formRef = React.createRef();
         actors:[],
         modelType:1,
         image:'',
-        imgId:''
+        imgId:'',
+        arrVal: null,
+        SelectTypeArr:null,
+        fileList:[],
+        imgs:[]
     }
+    uploadButton = (
+      <div>
+        <PlusOutlined />
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </div>
+    );
     render() {
         return (
             <div>
@@ -147,27 +143,44 @@ formRef = React.createRef();
                     <Form.Item label="电影信息">
                         <span className="ant-form-text">新增</span>
                     </Form.Item>
-                    < Form.Item label = "影片名"
-                    rules = {
-                            [{
-                                required: true,
-                                message: '影片名',
-                                type: 'string'
-                            }]
-                        }
-                    name = "titleCn" >
+                    < Form.Item label = "电影名称"
+                        rules = {
+                                [{
+                                    required: true,
+                                    message: '电影名称',
+                                    type: 'string'
+                                }]
+                            }
+                        name = "titleCn" >
                         < Input placeholder = "我和我的祖国"/ >
                     </Form.Item>
+                    < Form.Item label = "时长(分钟)"
+                        name = "runTime" >
+                        <Input placeholder = "时长" / >
+                    </Form.Item>
+
                     < Form.Item name = "date"
                     label = "上映时间" {
                         ...config
                     } >
+                        
                         <DatePicker 
                         values = {
                                 moment('2015-01-01', 'YYYY-MM-DD')}
-                                
-                        />
+
+                        /
+                        
+                        >
                     </Form.Item>    
+                    < Form.Item label = "影片详情"
+                        name = "content" >
+                        <TextArea
+                            placeholder="input here"
+                            className="custom"
+                            style={{ height: 50 }}
+                            // onKeyPress={handleKeyPress}
+                        />
+                    </Form.Item>
                     <Form.Item label="导演信息">
                         <span className="ant-form-text">
                             {
@@ -196,20 +209,6 @@ formRef = React.createRef();
                         </Button>
                     </Form.Item>
                     <Form.Item
-                        name = "location"
-                        label="地区"
-                        rules={[{ required: true, message: '上映地点', type: 'array' }]}
-                    >
-                        < Select mode = "multiple"
-                        placeholder = "上映地点" >
-                            {
-                                locationValue.map(item=>{
-                                    return <Option value={item.name} key={item.value}>{item.name}</Option>
-                                })
-                            }
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
                         name="selectInfo"
                         label="影片信息"
                         rules = {
@@ -220,20 +219,31 @@ formRef = React.createRef();
                             }]
                         }
                     >
-                        < Select mode = "multiple"
-                        placeholder = "影片信息" >
+                        {
+                            this.state.arrVal&&
+                            < Select mode = "multiple"
+                        placeholder = "影片信息" 
+                        defaultValue = {
+                            this.state.arrVal
+                            
+                        }
+                        onChange = {
+                                (info) => {
+                            this.handleValuesChange(info)
+                        }}
+                        >
                             {
-                                infoValue.map(item=>{
+                                infoValue&&infoValue.map(item => {
                                     return  <Option value={item.value} key={item.value}>{item.name}</Option>
                                 })
                             }
                         </Select>
+                        }
                     </Form.Item>
-
-
                     <Form.Item
                         name = "SelectType"
                         label = "电影类型"
+                        
                         rules = {
                             [{
                                 required: true,
@@ -242,7 +252,11 @@ formRef = React.createRef();
                             }]
                         }
                     >
-                        < Select mode = "multiple"
+                        {
+                            this.state.SelectTypeArr&&< Select mode = "multiple"
+                        defaultValue = {
+                            this.state.SelectTypeArr
+                        }
                         placeholder = "电影类型" >
                             {
                                 typeValue.map(item=>{
@@ -250,6 +264,8 @@ formRef = React.createRef();
                                 })
                             }
                         </Select>
+                        }
+                        
                     </Form.Item>
 
                 
@@ -275,17 +291,25 @@ formRef = React.createRef();
                 </Form.Item>
                 <Form.Item label="Dragger">
                     <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={this.normFile} noStyle>
-                    < Upload.Dragger name = "file"
-                    action = "/detail/addPic"
-                    onChange={(id)=>{
-                       this.handleChange(id)
-                    }}>
-                        <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                        <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-                    </Upload.Dragger>
+                        {
+                            this.state.imgs.map(item=>{
+                                return <img alt="example" style={{ width: '5rem' }} src={item.src} key={item.key}/>
+                            })
+                        }
+                        
+                        {
+                            console.log('this.state.fileList', this.state.fileList),
+                            this.state.fileList&&
+                            <Upload
+                                action = "/detail/addPic"
+                                listType="picture-card"
+                                fileList={this.state.fileList}
+                                onPreview={this.handlePreview}
+                                onChange={this.handleChange}
+                                >
+                                {this.uploadButton}
+                                </Upload>
+                        }
                     </Form.Item>
                 </Form.Item>
                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
@@ -311,9 +335,74 @@ formRef = React.createRef();
             </div>
         )
     }
+    componentDidMount() {
+        const id = this.props.match.params.id
+        axios.get(`/detail/selectOneById?id=${id}`).then(res => {
+
+            console.log(res, 'res')
+            const data=res.data
+            var arr=[]
+            if (data.is3D){
+                arr.push('3D')
+            }
+            if(data.isDMAX){
+                arr.push('DMAX')
+            }
+            if (data.isEggHunt) {
+                arr.push('EggHunt')
+            }
+            if (data.isIMAX) {
+                arr.push('IMAX')
+            }
+            if (data.isIMAX3D) {
+                    arr.push('IMAX3D')
+            }
+            if (data.isTicket) {
+                    arr.push('Ticket')
+            }
+                console.log(arr,'arr')
+            // const arr=[
+            //     data.is3D,data.isDMAX,data.isEggHunt,data.isIMAX, data.isIMAX3D,data.isTicket
+            // ]
+            // console.log(arr, 'arr')
+
+            // const arrI=info.map(item=>{
+            //     return item.name
+            // })
+            // console.log(arrI, 'arrI')
+            // var looo=lodash.zipObject(arrI,arr)
+            // console.log(looo)
+            // console.log(infoValue, 'infoValue')
+            this.setState({
+                directors:data.directors,
+                actors: data.actors,
+                arrVal: arr,
+                SelectTypeArr: data.type,
+                imgs: [{
+                    key: 1 ,
+                    src: 'http://192.168.60.198:3005/' + data.image
+                }]
+            })
+            this.formRef.current.setFieldsValue({
+                // console.log(res)
+                titleCn: data.title,
+                runTime: data.runTime,
+                content: data.content,
+                NearestCinemaCount: data.NearestCinemaCount,
+                NearestShowtimeCount: data.NearestShowtimeCount,
+                switch: data.switch,
+                r: data.r/20
+                
+
+            })
+        })
+
+    }
+    handleValuesChange(info){
+        console.log(info,78)
+    }
     handleChange(info){
         if (info.file.status !== 'uploading') {
-            // console.log('09',info.file, info.fileList);
             this.setState({
                 imgId:info.file.response
             })
@@ -349,35 +438,27 @@ formRef = React.createRef();
         })
     }
     onFinish = values =>{
-        console.log(values, 'values')
+
         var rmonth=moment(values.date._d).format("MM")
         var rDay = moment(values.date._d).format("DD")
         var releaseDate=moment(values.date._d).format('MM DD YYYY')+'上映'
-        if (!values.switch) {
-            let ms = {
-                id: this.state.imgId,
-                t: values.titleCn,
-                r: values.r*20,
-                NearestCinemaCount: values.NearestCinemaCount,
-                NearestShowtimeCount: values.NearestShowtimeCount,
-                file: values.file,
-                rDay,
-                rmonth,
-                releaseDate,
-                title: values.titleCn,
-                r: values.r * 20,
-                wantedCount: 1243,
-                // file: values.file,
-                type: values.SelectType,
-                directors: this.state.directors,
-                actors: this.state.actors
-            }
-        // }
-        console.log('ms2', ms)
-        axios.post('/detail/addDetail', ms).then(res => {
-            message.success({content: '提交成功!'})
+        var info = this.infoValue.map(item => {
+            return item.value
         })
-    }else{
+        let arrTrue = []
+        let arrFalse = []
+        for (var i = 0; i < info.length; i++) {
+            for (var j = 0; j < values.selectInfo.length; j++) {
+                if (info[i] === values.selectInfo[j]) {
+                    arrTrue.push(values.selectInfo[j])
+                }
+            }
+        }
+        arrFalse = lodash.differenceBy(info, values.selectInfo)
+        let arrTures = arrTrue.map(item => true)
+        let arrFalses = arrFalse.map(item => false)
+        arrTrue = lodash.zipObject(arrTrue, arrTures)
+        arrFalse = lodash.zipObject(arrFalse, arrFalses)
         let ms = {
             id: this.state.imgId,
             rDay,
@@ -389,18 +470,31 @@ formRef = React.createRef();
             // file: values.file,
             type: values.SelectType,
             directors: this.state.directors,
-            actors: this.state.actors
+            actors: this.state.actors,
+            ...arrTrue,
+            ...arrFalse,
+            runTime: values.runTime,
+            NearestCinemaCount: values.NearestCinemaCount,
+            NearestShowtimeCount: values.NearestShowtimeCount,
+            switch: values.switch,
+            content: values.content
         }
-        console.log('ms1',ms)
-        axios.post('/detail/addDetail',ms,'').then(res => {
-            message.success({
-                content: '提交成功!'
-            })
+        console.log(123456)
+        axios.post('/detail/addDetail',ms).then(res => {
+            console.log(res,'llll')
+            if(res.data.code==1){
+                message.success({
+                    content: '提交成功!'
+                })
+            }else{
+                message.success({
+                    content: '提交失败!'
+                })
+            }
         })
-    }
+        this.formRef.current.resetFields()
     }
     normFile = e => {
-        console.log(e,e)
         this.setState({
             image: e
         })
@@ -417,3 +511,11 @@ formRef = React.createRef();
         return defaults(...arr);
     }
 }
+export default withRouter(MovieManage)
+ // axios.get('').then(res=>{
+ //     data
+ // })
+ // this.formRef.current.setFieldsValue({
+ // })
+//  http: //192.168.60.198:3005/uploads/2a6169f85aefe94e6ce2f43a757de249.jpg
+// http://192.168.60.198:3005/uploads/2bf7b43c4b592736da4046b7862b310c.jpg

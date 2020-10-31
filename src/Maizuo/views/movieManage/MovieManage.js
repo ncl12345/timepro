@@ -12,9 +12,13 @@ import {
     Rate,
     Input,
     DatePicker,
+    Modal
 } from 'antd';
+
 import {
-    InboxOutlined
+    InboxOutlined,
+    PlusOutlined
+
 } from '@ant-design/icons';
 import MovieModel from './MovieModel';
 const {
@@ -116,6 +120,13 @@ const locationValue=[
         value: 'Kingdom'
     }
 ]
+// const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+    const uploadButton = (
+      <div>
+        <PlusOutlined />
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </div>
+    );
 export default class MovieManage extends Component {
 formRef = React.createRef();
     state={
@@ -126,7 +137,17 @@ formRef = React.createRef();
         actors:[],
         modelType:1,
         image:'',
-        imgId:''
+        imgId:'',
+        fileList: [{
+            src: 'http://192.168.60.198:3005/uploads/2bf7b43c4b592736da4046b7862b310c.jpg',
+            key:1
+        }],
+        previewVisible: false,
+        previewImage: [{
+            src: 'http://192.168.60.198:3005/uploads/2bf7b43c4b592736da4046b7862b310c.jpg',
+            key: 1
+        }],
+        previewTitle: 'df',
     }
     render() {
         return (
@@ -149,11 +170,11 @@ formRef = React.createRef();
                     <Form.Item label="电影信息">
                         <span className="ant-form-text">新增</span>
                     </Form.Item>
-                    < Form.Item label = "影片名"
+                    < Form.Item label = "电影名称"
                         rules = {
                                 [{
                                     required: true,
-                                    message: '影片名',
+                                    message: '电影名称',
                                     type: 'string'
                                 }]
                             }
@@ -175,7 +196,7 @@ formRef = React.createRef();
                                 moment('2015-01-01', 'YYYY-MM-DD')}
                         />
                     </Form.Item>    
-                    < Form.Item label = "简介"
+                    < Form.Item label = "影片详情"
                         name = "content" >
                         <TextArea
                             placeholder="input here"
@@ -211,20 +232,6 @@ formRef = React.createRef();
                         添加演员
                         </Button>
                     </Form.Item>
-                    {/* <Form.Item
-                        name = "location"
-                        label="地区"
-                        rules={[{ required: true, message: '上映地点', type: 'array' }]}
-                    >
-                        < Select mode = "multiple"
-                        placeholder = "上映地点" >
-                            {
-                                locationValue.map(item=>{
-                                    return <Option value={item.name} key={item.value}>{item.name}</Option>
-                                })
-                            }
-                        </Select>
-                    </Form.Item> */}
                     <Form.Item
                         name="selectInfo"
                         label="影片信息"
@@ -289,7 +296,7 @@ formRef = React.createRef();
                 <Form.Item name="r" label="排名">
                     < Rate allowHalf={true}/ >
                 </Form.Item>
-                <Form.Item label="Dragger">
+                {/* <Form.Item label="Dragger">
                     <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={this.normFile} noStyle>
                     < Upload.Dragger name = "file"
                     action = "/detail/addPic"
@@ -302,6 +309,33 @@ formRef = React.createRef();
                         <p className="ant-upload-text">Click or drag file to this area to upload</p>
                         <p className="ant-upload-hint">Support for a single or bulk upload.</p>
                     </Upload.Dragger>
+                    </Form.Item>
+                </Form.Item> */}
+                <Form.Item label="Dragger">
+                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={this.normFile} noStyle>
+                        <Upload
+                            action = "/detail/addPic"
+                            listType="picture-card"
+                            // fileList = {
+                            //     this.state.fileList
+                            // }
+                            // onPreview={this.handlePreview}
+                            // onChange={this.handleChange}
+                            >
+                            {/* {fileList.length >= 8 ? null : uploadButton} */}
+                            </Upload>
+                            <Modal
+                            visible={this.state.previewVisible}
+                            title={this.state.title}
+                            // footer={null}
+                            // onCancel={this.handleCancel}
+                            >
+                       {
+                            this.state.previewImage.map(item => {
+                                return <img alt="example" style={{ width: '5rem' }} src={item.src} key={item.key}/>
+                            })
+                        }
+                        </Modal>
                     </Form.Item>
                 </Form.Item>
                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
@@ -416,6 +450,7 @@ formRef = React.createRef();
                 })
             }
         })
+        this.formRef.current.resetFields()
     }
     normFile = e => {
         this.setState({
