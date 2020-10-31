@@ -123,7 +123,8 @@ formRef = React.createRef();
         directors:[],
         actors:[],
         modelType:1,
-        image:''
+        image:'',
+        imgId:''
     }
     render() {
         return (
@@ -147,6 +148,13 @@ formRef = React.createRef();
                         <span className="ant-form-text">新增</span>
                     </Form.Item>
                     < Form.Item label = "影片名"
+                    rules = {
+                            [{
+                                required: true,
+                                message: '影片名',
+                                type: 'string'
+                            }]
+                        }
                     name = "titleCn" >
                         < Input placeholder = "我和我的祖国"/ >
                     </Form.Item>
@@ -190,9 +198,10 @@ formRef = React.createRef();
                     <Form.Item
                         name = "location"
                         label="地区"
-                        rules={[{ required: true, message: 'Please select your favourite colors!', type: 'array' }]}
+                        rules={[{ required: true, message: '上映地点', type: 'array' }]}
                     >
-                        <Select mode="multiple" placeholder="Please select favourite colors">
+                        < Select mode = "multiple"
+                        placeholder = "上映地点" >
                             {
                                 locationValue.map(item=>{
                                     return <Option value={item.name} key={item.value}>{item.name}</Option>
@@ -202,10 +211,17 @@ formRef = React.createRef();
                     </Form.Item>
                     <Form.Item
                         name="selectInfo"
-                        label="详细信息"
-                        rules={[{ required: true, message: 'Please select your favourite colors!', type: 'array' }]}
+                        label="影片信息"
+                        rules = {
+                            [{
+                                required: true,
+                                message: '影片信息',
+                                type: 'array'
+                            }]
+                        }
                     >
-                        <Select mode="multiple" placeholder="Please select favourite colors">
+                        < Select mode = "multiple"
+                        placeholder = "影片信息" >
                             {
                                 infoValue.map(item=>{
                                     return  <Option value={item.value} key={item.value}>{item.name}</Option>
@@ -218,9 +234,16 @@ formRef = React.createRef();
                     <Form.Item
                         name = "SelectType"
                         label = "电影类型"
-                        rules={[{ required: true, message: 'Please select your favourite colors!', type: 'array' }]}
+                        rules = {
+                            [{
+                                required: true,
+                                message: '电影类型',
+                                type: 'array'
+                            }]
+                        }
                     >
-                        <Select mode="multiple" placeholder="Please select favourite colors">
+                        < Select mode = "multiple"
+                        placeholder = "电影类型" >
                             {
                                 typeValue.map(item=>{
                                     return  <Option  value={item.name} key={item.value}>{item.name}</Option>
@@ -250,31 +273,13 @@ formRef = React.createRef();
                 <Form.Item name="r" label="排名">
                     < Rate allowHalf={true}/ >
                 </Form.Item>
-                {/* <Form.Item label="Dragger">
-                    < Form.Item name = "dragger"
-                    valuePropName = "fileList"
-                    getValueFromEvent = {
-                        this.normFile
-                    }
-                    name = 'file'
-                    noStyle >
-                    < Upload.Dragger >
-                        <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                        <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-                    </Upload.Dragger>
-                    </Form.Item>
-                </Form.Item> */}
                 <Form.Item label="Dragger">
-                    < Form.Item name = "file"
-                    valuePropName = "fileList"
-                    getValueFromEvent = {
-                        this.normFile
-                    }
-                    noStyle  >
-                    < Upload.Dragger>
+                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={this.normFile} noStyle>
+                    < Upload.Dragger name = "file"
+                    action = "/detail/addPic"
+                    onChange={(id)=>{
+                       this.handleChange(id)
+                    }}>
                         <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                         </p>
@@ -305,6 +310,14 @@ formRef = React.createRef();
                 }}></MovieModel>}
             </div>
         )
+    }
+    handleChange(info){
+        if (info.file.status !== 'uploading') {
+            // console.log('09',info.file, info.fileList);
+            this.setState({
+                imgId:info.file.response
+            })
+        }
     }
     changeIt(res,type){
         if(res){
@@ -342,6 +355,7 @@ formRef = React.createRef();
         var releaseDate=moment(values.date._d).format('MM DD YYYY')+'上映'
         if (!values.switch) {
             let ms = {
+                id: this.state.imgId,
                 t: values.titleCn,
                 r: values.r*20,
                 NearestCinemaCount: values.NearestCinemaCount,
@@ -353,7 +367,7 @@ formRef = React.createRef();
                 title: values.titleCn,
                 r: values.r * 20,
                 wantedCount: 1243,
-                file: values.file,
+                // file: values.file,
                 type: values.SelectType,
                 directors: this.state.directors,
                 actors: this.state.actors
@@ -365,19 +379,20 @@ formRef = React.createRef();
         })
     }else{
         let ms = {
+            id: this.state.imgId,
             rDay,
             rmonth,
             releaseDate,
             title: values.titleCn,
             r: values.r*20,
             wantedCount:1243,
-            file: values.file,
+            // file: values.file,
             type: values.SelectType,
             directors: this.state.directors,
             actors: this.state.actors
         }
         console.log('ms1',ms)
-        axios.post('/detail/addDetail',JSON.stringify(ms)).then(res => {
+        axios.post('/detail/addDetail',ms,'').then(res => {
             message.success({
                 content: '提交成功!'
             })

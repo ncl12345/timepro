@@ -62,6 +62,11 @@ const routes = [
         permission: [3]
     },
     {
+        path: "/movie-manage/updata/:id",
+        component: CinemaList,
+        permission: [3]
+    },
+    {
         path: "/statistical-analysis/pai",
         component: Pai,
         permission: [3]

@@ -75,7 +75,7 @@ export default class Pai extends Component {
                                 color: 'red' // 0% 处的颜色
                             }, {
                                 offset: 1,
-                                color: 'blue' // 100% 处的颜色
+                                color: 'black' // 100% 处的颜色
                             }],
                             global: false // 缺省为 false
                         }

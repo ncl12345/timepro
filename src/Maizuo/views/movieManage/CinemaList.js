@@ -4,11 +4,11 @@ import {
 } from 'antd';
 
 const columns = [{
-    title: 'Name',
+    title: '电影',
     dataIndex: 'name',
   },
   {
-    title: 'Chinese Score',
+    title: '地点',
     dataIndex: 'chinese',
     sorter: {
       compare: (a, b) => a.chinese - b.chinese,
@@ -16,7 +16,7 @@ const columns = [{
     },
   },
   {
-    title: 'Math Score',
+    title: '评分',
     dataIndex: 'math',
     sorter: {
       compare: (a, b) => a.math - b.math,
@@ -24,8 +24,8 @@ const columns = [{
     },
   },
   {
-    title: 'English Score',
-    dataIndex: 'english',
+    title: 'N场',
+    dataIndex: 'NearestShowtimeCount',
     sorter: {
       compare: (a, b) => a.english - b.english,
       multiple: 1,
@@ -36,6 +36,7 @@ const columns = [{
 const data = [{
     key: '1',
     name: 'John Brown',
+    NearestShowtimeCount:2,
     chinese: 98,
     math: 60,
     english: 70,
@@ -43,6 +44,7 @@ const data = [{
   {
     key: '2',
     name: 'Jim Green',
+    NearestShowtimeCount: 5,
     chinese: 98,
     math: 66,
     english: 89,
@@ -51,12 +53,14 @@ const data = [{
     key: '3',
     name: 'Joe Black',
     chinese: 98,
+    NearestShowtimeCount: 1,
     math: 90,
     english: 70,
   },
   {
     key: '4',
     name: 'Jim Red',
+    NearestShowtimeCount: 10,
     chinese: 88,
     math: 99,
     english: 89,

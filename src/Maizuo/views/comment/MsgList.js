@@ -20,6 +20,7 @@ export default class MsgList extends Component {
     state={
         info:[{
             author: 'xiaommm',
+            key:"1",
             src: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
             com: `We supply a series of design principles, practical patterns and high quality designresources (Sketch and Axure), to help people create their product prototypes beautifullyand efficiently.`
         }]

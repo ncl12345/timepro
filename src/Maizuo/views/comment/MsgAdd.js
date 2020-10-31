@@ -4,7 +4,7 @@ export default class MsgAdd extends Component {
     render() {
         return (
             <div>
-                MsgAdd
+                <div style={{background:'yellow'}}></div>
             </div>
         )
     }

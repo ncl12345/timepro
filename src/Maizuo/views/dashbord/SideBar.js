@@ -60,7 +60,7 @@ const menus = [{
             },
             {
                 path: '/movie-manage/cinema',
-                name: '影院信息',
+                name: '影院列表',
                 permission: [3]
             },
         ]
@@ -111,7 +111,7 @@ const menus = [{
             <Sider className="site-layout-background" width={200} collapsible collapsed={this.props.collapsed}>
             <Menu
                 mode="inline"
-                defaultOpenKeys = {
+                openKeys = {
                     openKeys
                 }
                 selectedKeys = {
