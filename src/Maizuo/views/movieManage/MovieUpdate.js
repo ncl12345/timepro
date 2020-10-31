@@ -480,7 +480,7 @@ formRef = React.createRef();
             runTime: values.runTime,
             NearestCinemaCount: values.NearestCinemaCount,
             NearestShowtimeCount: values.NearestShowtimeCount,
-            switch: values.switch,
+            switch: values.switch ? 1 : 0,
             content: values.content
         }
         console.log(123456)
