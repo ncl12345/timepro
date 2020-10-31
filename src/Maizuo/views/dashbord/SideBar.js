@@ -111,7 +111,7 @@ const menus = [{
             <Sider className="site-layout-background" width={200} collapsible collapsed={this.props.collapsed}>
             <Menu
                 mode="inline"
-                openKeys = {
+                defaultOpenKeys = {
                     openKeys
                 }
                 selectedKeys = {
