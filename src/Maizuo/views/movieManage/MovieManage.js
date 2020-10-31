@@ -121,13 +121,14 @@ const locationValue=[
     }
 ]
 // const { previewVisible, previewImage, fileList, previewTitle } = this.state;
-    const uploadButton = (
-      <div>
-        <PlusOutlined />
-        <div style={{ marginTop: 8 }}>Upload</div>
-      </div>
-    );
+    
 export default class MovieManage extends Component {
+    uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    )
 formRef = React.createRef();
     state={
         show:false,
@@ -138,10 +139,7 @@ formRef = React.createRef();
         modelType:1,
         image:'',
         imgId:'',
-        fileList: [{
-            src: 'http://192.168.60.198:3005/uploads/2bf7b43c4b592736da4046b7862b310c.jpg',
-            key:1
-        }],
+        fileList: [],
         previewVisible: false,
         previewImage: [{
             src: 'http://192.168.60.198:3005/uploads/2bf7b43c4b592736da4046b7862b310c.jpg',
@@ -323,6 +321,9 @@ formRef = React.createRef();
                             // onChange={this.handleChange}
                             >
                             {/* {fileList.length >= 8 ? null : uploadButton} */}
+                            {
+                                this.uploadButton
+                            }
                             </Upload>
                             <Modal
                             visible={this.state.previewVisible}
@@ -330,7 +331,7 @@ formRef = React.createRef();
                             // footer={null}
                             // onCancel={this.handleCancel}
                             >
-                       {
+                            {
                             this.state.previewImage.map(item => {
                                 return <img alt="example" style={{ width: '5rem' }} src={item.src} key={item.key}/>
                             })
@@ -398,6 +399,7 @@ formRef = React.createRef();
         })
     }
     onFinish = values =>{
+        console.log(values)
         var rmonth=moment(values.date._d).format("MM")
         var rDay = moment(values.date._d).format("DD")
         var releaseDate=moment(values.date._d).format('MM DD YYYY')+'上映'

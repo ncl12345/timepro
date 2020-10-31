@@ -114,6 +114,7 @@ formRef = React.createRef();
         arrVal: null,
         SelectTypeArr:null,
         fileList:[],
+        previewImage:[],
         imgs:[]
     }
     uploadButton = (
@@ -165,12 +166,10 @@ formRef = React.createRef();
                     } >
                         
                         <DatePicker 
-                        values = {
+                        // defaultValue={moment('2015-06-06', dateFormat)} disabled 
+                        value = {
                                 moment('2015-01-01', 'YYYY-MM-DD')}
-
-                        /
-                        
-                        >
+                        />
                     </Form.Item>    
                     < Form.Item label = "影片详情"
                         name = "content" >
@@ -267,9 +266,6 @@ formRef = React.createRef();
                         }
                         
                     </Form.Item>
-
-                
-
                 <Form.Item label="影院">
                     < Form.Item name = "NearestCinemaCount"
                     noStyle >
@@ -291,25 +287,32 @@ formRef = React.createRef();
                 </Form.Item>
                 <Form.Item label="Dragger">
                     <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={this.normFile} noStyle>
-                        {
-                            this.state.imgs.map(item=>{
+                        <Upload
+                            action = "/detail/addPic"
+                            listType="picture-card"
+                            // fileList = {
+                            //     this.state.fileList
+                            // }
+                            // onPreview={this.handlePreview}
+                            // onChange={this.handleChange}
+                            >
+                            {/* {fileList.length >= 8 ? null : uploadButton} */}
+                            {
+                                this.uploadButton
+                            }
+                            </Upload>
+                            <Modal
+                            visible={this.state.previewVisible}
+                            title={this.state.title}
+                            // footer={null}
+                            // onCancel={this.handleCancel}
+                            >
+                            {
+                            this.state.previewImage.map(item => {
                                 return <img alt="example" style={{ width: '5rem' }} src={item.src} key={item.key}/>
                             })
                         }
-                        
-                        {
-                            console.log('this.state.fileList', this.state.fileList),
-                            this.state.fileList&&
-                            <Upload
-                                action = "/detail/addPic"
-                                listType="picture-card"
-                                fileList={this.state.fileList}
-                                onPreview={this.handlePreview}
-                                onChange={this.handleChange}
-                                >
-                                {this.uploadButton}
-                                </Upload>
-                        }
+                        </Modal>
                     </Form.Item>
                 </Form.Item>
                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
@@ -438,11 +441,11 @@ formRef = React.createRef();
         })
     }
     onFinish = values =>{
-
+        debugger
         var rmonth=moment(values.date._d).format("MM")
         var rDay = moment(values.date._d).format("DD")
         var releaseDate=moment(values.date._d).format('MM DD YYYY')+'上映'
-        var info = this.infoValue.map(item => {
+        var info = infoValue.map(item => {
             return item.value
         })
         let arrTrue = []
@@ -460,7 +463,8 @@ formRef = React.createRef();
         arrTrue = lodash.zipObject(arrTrue, arrTures)
         arrFalse = lodash.zipObject(arrFalse, arrFalses)
         let ms = {
-            id: this.state.imgId,
+            unless:1,
+            id: this.props.match.params.id,
             rDay,
             rmonth,
             releaseDate,
@@ -481,7 +485,6 @@ formRef = React.createRef();
         }
         console.log(123456)
         axios.post('/detail/addDetail',ms).then(res => {
-            console.log(res,'llll')
             if(res.data.code==1){
                 message.success({
                     content: '提交成功!'
@@ -512,10 +515,3 @@ formRef = React.createRef();
     }
 }
 export default withRouter(MovieManage)
- // axios.get('').then(res=>{
- //     data
- // })
- // this.formRef.current.setFieldsValue({
- // })
-//  http: //192.168.60.198:3005/uploads/2a6169f85aefe94e6ce2f43a757de249.jpg
-// http://192.168.60.198:3005/uploads/2bf7b43c4b592736da4046b7862b310c.jpg
