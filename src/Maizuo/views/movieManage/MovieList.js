@@ -15,6 +15,13 @@ const {
       nowDate:[],
       key:1
     }
+    nowColumns = [ {
+      title: '影片名',
+      
+      dataIndex: 'name',
+      key: 'name',
+      render: text => <a>{text}</a>,
+    }]
   nowColumns = [
   {
     title: '影片名',
@@ -170,6 +177,15 @@ const {
             <Table columns={this.comingColumns} dataSource={this.state.comingData} />
           </TabPane>
           <TabPane tab="正在热映" key="2">
+              <Table columns = {
+                this.nowColumns
+              }
+              dataSource = {
+                this.state.nowData
+              }
+              />
+          </TabPane>
+          <TabPane tab="已下架" key="3">
               <Table columns = {
                 this.nowColumns
               }

@@ -20,7 +20,9 @@ import MovieModel from './MovieModel';
 const {
     Option
 } = Select;
-
+const {
+    TextArea
+} = Input;
 const formItemLayout = {
     labelCol: {
         span: 6
@@ -148,26 +150,40 @@ formRef = React.createRef();
                         <span className="ant-form-text">新增</span>
                     </Form.Item>
                     < Form.Item label = "影片名"
-                    rules = {
-                            [{
-                                required: true,
-                                message: '影片名',
-                                type: 'string'
-                            }]
-                        }
-                    name = "titleCn" >
+                        rules = {
+                                [{
+                                    required: true,
+                                    message: '影片名',
+                                    type: 'string'
+                                }]
+                            }
+                        name = "titleCn" >
                         < Input placeholder = "我和我的祖国"/ >
                     </Form.Item>
+                    < Form.Item label = "时长(分钟)"
+                        name = "runTime" >
+                        <Input placeholder = "时长" / >
+                    </Form.Item>
+
                     < Form.Item name = "date"
                     label = "上映时间" {
                         ...config
                     } >
+                        
                         <DatePicker 
                         values = {
                                 moment('2015-01-01', 'YYYY-MM-DD')}
-                                
                         />
                     </Form.Item>    
+                    < Form.Item label = "简介"
+                        name = "content" >
+                        <TextArea
+                            placeholder="input here"
+                            className="custom"
+                            style={{ height: 50 }}
+                            // onKeyPress={handleKeyPress}
+                        />
+                    </Form.Item>
                     <Form.Item label="导演信息">
                         <span className="ant-form-text">
                             {
@@ -195,7 +211,7 @@ formRef = React.createRef();
                         添加演员
                         </Button>
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         name = "location"
                         label="地区"
                         rules={[{ required: true, message: '上映地点', type: 'array' }]}
@@ -208,7 +224,7 @@ formRef = React.createRef();
                                 })
                             }
                         </Select>
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item
                         name="selectInfo"
                         label="影片信息"
@@ -313,7 +329,6 @@ formRef = React.createRef();
     }
     handleChange(info){
         if (info.file.status !== 'uploading') {
-            // console.log('09',info.file, info.fileList);
             this.setState({
                 imgId:info.file.response
             })
@@ -349,35 +364,26 @@ formRef = React.createRef();
         })
     }
     onFinish = values =>{
-        console.log(values, 'values')
         var rmonth=moment(values.date._d).format("MM")
         var rDay = moment(values.date._d).format("DD")
         var releaseDate=moment(values.date._d).format('MM DD YYYY')+'上映'
-        if (!values.switch) {
-            let ms = {
-                id: this.state.imgId,
-                t: values.titleCn,
-                r: values.r*20,
-                NearestCinemaCount: values.NearestCinemaCount,
-                NearestShowtimeCount: values.NearestShowtimeCount,
-                file: values.file,
-                rDay,
-                rmonth,
-                releaseDate,
-                title: values.titleCn,
-                r: values.r * 20,
-                wantedCount: 1243,
-                // file: values.file,
-                type: values.SelectType,
-                directors: this.state.directors,
-                actors: this.state.actors
-            }
-        // }
-        console.log('ms2', ms)
-        axios.post('/detail/addDetail', ms).then(res => {
-            message.success({content: '提交成功!'})
+        var info = infoValue.map(item => {
+            return item.value
         })
-    }else{
+        let arrTrue = []
+        let arrFalse = []
+        for (var i = 0; i < info.length; i++) {
+            for (var j = 0; j < values.selectInfo.length; j++) {
+                if (info[i] === values.selectInfo[j]) {
+                    arrTrue.push(values.selectInfo[j])
+                }
+            }
+        }
+        arrFalse = lodash.differenceBy(info, values.selectInfo)
+        let arrTures = arrTrue.map(item => true)
+        let arrFalses = arrFalse.map(item => false)
+        arrTrue = lodash.zipObject(arrTrue, arrTures)
+        arrFalse = lodash.zipObject(arrFalse, arrFalses)
         let ms = {
             id: this.state.imgId,
             rDay,
@@ -389,18 +395,29 @@ formRef = React.createRef();
             // file: values.file,
             type: values.SelectType,
             directors: this.state.directors,
-            actors: this.state.actors
+            actors: this.state.actors,
+            ...arrTrue,
+            ...arrFalse,
+            runTime: values.runTime,
+            NearestCinemaCount: values.NearestCinemaCount,
+            NearestShowtimeCount: values.NearestShowtimeCount,
+            switch: values.switch,
+            content: values.content
         }
-        console.log('ms1',ms)
         axios.post('/detail/addDetail',ms,'').then(res => {
-            message.success({
-                content: '提交成功!'
-            })
+            console.log(res,'llll')
+            if(res.data.code==1){
+                message.success({
+                    content: '提交成功!'
+                })
+            }else{
+                message.success({
+                    content: '提交失败!'
+                })
+            }
         })
     }
-    }
     normFile = e => {
-        console.log(e,e)
         this.setState({
             image: e
         })
