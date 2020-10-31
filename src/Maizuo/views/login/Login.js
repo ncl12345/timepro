@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
+import axios from 'axios'
 import Particles from 'react-particles-js';
 import {
     Form,
     Input,
     Button,
-    Checkbox
+    Checkbox,
+    message
 } from 'antd';
 
 const layout = {
@@ -25,6 +27,7 @@ export default class Login extends Component {
     state={
         height:6
     }
+    formRef = createRef()
     render() {
         return (
             <div style={{position:"relative"}}>
@@ -48,7 +51,9 @@ export default class Login extends Component {
             />
                 <Form
                 {...layout}
+                ref = {this.formRef}
                 name="basic"
+                onFinish = {this.onFinish}
                 initialValues={{ remember: true }}
                 style={{position:"absolute",
                 right: '0', width: '25rem',top:'5rem',bottom:'0',left:'0',margin:'0 auto'
@@ -78,7 +83,7 @@ export default class Login extends Component {
 
                     <Form.Item {...tailLayout}>
                         <Button  htmlType="submit">
-                        Submit
+                        登录
                         </Button>
                     </Form.Item>
                 </Form>
@@ -90,5 +95,21 @@ export default class Login extends Component {
             height:window.innerHeight-15+'px'
         })
     }
+    onFinish = (values)=>{
+        let {username , password} = values
+        axios.get(`/login/getUser?username=${username}&password=${password}&status===true`).then(res=>{  
+            console.log(res.data)
+            const data = res.data.info
+            if(res.data.code){
+                localStorage.setItem('token', JSON.stringify(data))
+                this.props.history.push('/home')
+                message.success(`欢迎${data.username}回来`)
+            }else{
+                message.info('登陆失败');
+            }
+        })
+        
+    }
     
+
 }

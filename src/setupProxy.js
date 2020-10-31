@@ -45,4 +45,18 @@ module.exports = function (app) {
             changeOrigin: true,
         })
     );
+    app.use(
+        '/login',
+        createProxyMiddleware({
+            target: tempUrl,
+            changeOrigin: true,
+        })
+    );
+    app.use(
+        '/cinema',
+        createProxyMiddleware({
+            target: tempUrl,
+            changeOrigin: true,
+        })
+    );
 };
