@@ -287,6 +287,12 @@ formRef = React.createRef();
                 </Form.Item>
                 <Form.Item label="Dragger">
                     <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={this.normFile} noStyle>
+                    {
+                            this.state.imgs.map(item => {
+                                console.log(item.src, 12)
+                                return <img alt="example" style={{ width: '5rem' }} src={item.src} key={item.key}/>
+                            })
+                        }
                         <Upload
                             action = "/detail/addPic"
                             listType="picture-card"
@@ -294,25 +300,21 @@ formRef = React.createRef();
                             //     this.state.fileList
                             // }
                             // onPreview={this.handlePreview}
-                            // onChange={this.handleChange}
+                            onChange={this.handleChange}
                             >
                             {/* {fileList.length >= 8 ? null : uploadButton} */}
                             {
                                 this.uploadButton
                             }
                             </Upload>
-                            <Modal
-                            visible={this.state.previewVisible}
+                            {/* <Modal
+                            // visible={true}
                             title={this.state.title}
                             // footer={null}
                             // onCancel={this.handleCancel}
-                            >
-                            {
-                            this.state.previewImage.map(item => {
-                                return <img alt="example" style={{ width: '5rem' }} src={item.src} key={item.key}/>
-                            })
-                        }
-                        </Modal>
+                            > */}
+                            
+                        {/* </Modal> */}
                     </Form.Item>
                 </Form.Item>
                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
@@ -383,9 +385,10 @@ formRef = React.createRef();
                 SelectTypeArr: data.type,
                 imgs: [{
                     key: 1 ,
-                    src: 'http://192.168.60.198:3005/' + data.image
+                    src: 'http://192.168.60.198:3005' + data.image
                 }]
             })
+            console.log(this.state.imgs,4354)
             this.formRef.current.setFieldsValue({
                 // console.log(res)
                 titleCn: data.title,

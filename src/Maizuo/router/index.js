@@ -15,12 +15,12 @@ export default class MyRouter extends Component {
             <Myrouter >
                 <Switch>
                     <Route path="/login" component={Login}/>
-                    <Route path="/" component={Dashbord}/>
-                    {/* // render={()=>
-                    // localStorage.getItem('token')?
-                    // <Dashbord></Dashbord>: <Redirect from="*" to="/login
-                    // "/>
-                    // }/> */}
+                    <Route path="/" component={Dashbord}
+                     render={()=>
+                     localStorage.getItem('token')?
+                     <Dashbord></Dashbord>: <Redirect from="*" to="/login
+                     "/>
+                     }/>
                     <Redirect from="*" to="/login"/>
                 </Switch>
                 {this.props.children}

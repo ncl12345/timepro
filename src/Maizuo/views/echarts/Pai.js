@@ -5,6 +5,7 @@ import axios from 'axios'
 
 
 export default class Pai extends Component {
+    myChart=null
     render() {
         return (
             <div id='main' 

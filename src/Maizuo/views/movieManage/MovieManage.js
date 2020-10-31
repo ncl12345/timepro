@@ -318,7 +318,11 @@ formRef = React.createRef();
                             //     this.state.fileList
                             // }
                             // onPreview={this.handlePreview}
-                            // onChange={this.handleChange}
+                            onChange = {
+                                (item) => {
+                                    this.handleChange(item)
+                                }
+                            }
                             >
                             {/* {fileList.length >= 8 ? null : uploadButton} */}
                             {
@@ -328,6 +332,9 @@ formRef = React.createRef();
                             <Modal
                             visible={this.state.previewVisible}
                             title={this.state.title}
+                            // onChange = {
+                            //     this.handleChange
+                            // }
                             // footer={null}
                             // onCancel={this.handleCancel}
                             >
@@ -364,6 +371,7 @@ formRef = React.createRef();
     }
     handleChange(info){
         if (info.file.status !== 'uploading') {
+            console.log(info,12345)
             this.setState({
                 imgId:info.file.response
             })
@@ -440,7 +448,7 @@ formRef = React.createRef();
             switch: values.switch?1:0,
             content: values.content
         }
-        axios.post('/detail/addDetail',ms,'').then(res => {
+        axios.post('/detail/addDetail',ms).then(res => {
             console.log(res,'llll')
             if(res.data.code==1){
                 message.success({

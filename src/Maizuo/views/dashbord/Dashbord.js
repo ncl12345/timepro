@@ -62,7 +62,7 @@ const routes = [
         permission: [3]
     },
     {
-        path: "/movie-manage/manage/updata/:id",
+        path: "/movie-manage/updata/:id",
         component: MovieUpdata,
         permission: [3]
     },
